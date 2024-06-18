@@ -13,19 +13,19 @@ double getNumber();
  * @param min - минимальное значение диапазона значений элементов массива
  * @param max - максимальное значение диапазона значений элементов массива
  */
-void checkRange(double min, double max);
+void checkRange(const double min, const double max);
 /**
 * @breef Табулирует функцию x(y) и выводит в виде столбца
 * @param minValue - минимальное значение диапазона
 * @param maxValue - максимальное значение диапазона
 * @param step - значение шага функции
 */
-void printTabFunction(double minValue, double maxValue, double step);
+void printTabFunction(const double minValue, const double maxValue, const double step);
 /**
 * @breef - Проверка правильности введённого шага
 * @param step - значение шага функции
 */
-void checkStep(double step);
+void checkStep(const double step);
 /**
 * @breef - главная функция программы
 * @return - возвращает 0, если функция выполнена верно, иначе 1.
@@ -33,11 +33,11 @@ void checkStep(double step);
 int main()
 {
     cout << "Enter min and max values of range: " << endl;
-    double minValue = getNumber();
-    double maxValue = getNumber();
+    const double minValue = getNumber();
+    const double maxValue = getNumber();
     checkRange(minValue, maxValue);
     cout << "Enter step of range = ";
-    double step = getNumber();
+    const double step = getNumber();
     checkStep(step);
     printTabFunction(minValue, maxValue, step);
 }
@@ -52,7 +52,7 @@ double getNumber()
     }
     return number;
 }
-void checkRange(double min, double max)
+void checkRange(const double min, const double max)
 {
     if (min > max)
     {
@@ -60,7 +60,7 @@ void checkRange(double min, double max)
         abort();
     }
 }
-void printTabFunction(double minValue, double maxValue, double step)
+void printTabFunction(const double minValue, const double maxValue, const double step)
 {
     cout << setw(10) << "x" << setw(10) << "y" << endl;
     for (double i = minValue; i < maxValue + step; i = i + step) {
@@ -68,7 +68,7 @@ void printTabFunction(double minValue, double maxValue, double step)
         cout << setw(10) << i << setw(10) << a << endl;
     }
 }
-void checkStep(double step)
+void checkStep(const double step)
 {
     if (step <= 0)
     {
