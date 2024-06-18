@@ -94,11 +94,11 @@ double getValidE()
 
 double sumFirstN(const int n)
 {
-    const double a0 = 1;
+    const double a0 = -1;
     double current = a0;
     double sum = current;
 
-    for (int k = 0; k <= n - 2; ++k)
+    for (int k = 1; k <= n; ++k)
     {
         current *= recur(k);
         sum += current;
@@ -126,3 +126,4 @@ double recur(const int k)
 {
     return 0.5 / (k + 1) / (k + 2);
 }
+
