@@ -83,7 +83,7 @@ double getValidE()
     cout << "Введите значение e: ";
     cin >> e;
 
-	if (e < numeric_limits<double>::epsilon() && e < abs(recur(1)))
+	if (e < 1)
     {
         cout << "Ошибка: e должно быть положительным числом." << endl;
         return -1; // Возвращаем -1 для обработки ошибки
