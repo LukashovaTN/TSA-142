@@ -1,61 +1,33 @@
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <iomanip>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <string>
+#include <algorithm>
 using namespace std;
+
 /**
- * @brief оператор выбоа способа заполнения массива
- * @param RANDOM = 0 автоматическое заполнение
- * @param MANUALLY =1 ручное заполнение
+ * @brief создание и заполнение матрицы случайными элементами
+ * @param min - минимальное значение диапазона значений элементов матрицы
+ * @param max - максимальное значение диапазона значений элементов матрицы
  */
-enum SELECT
-{
-    RANDOM = 0,
-    MANUALLY = 1
-};
+void fill2DArrayRandom(vector<vector<int>>& arr, int min, int max);
 /**
- * @brief считывает значение типа int
- * @return считанное значение
- */
-int getValue();
-/**
- * @brief заполнение массива вручную
+ * @brief печать 2D массива
  * @param arr - массив
- * @param n - размер массива
- * @param min - минимальное значение диапазона значений элементов массива
- * @param max - максимальное значение диапазона значений элементов массива
  */
-void fillArray(int** arr, int const rows, int const cols, int const min, int const max);
+void print2DArray(const vector<vector<int>>& arr);
 /**
- * @brief Выводит массив на экран
+ * @brief находит максимальный элемент в каждой строке и заменяет его на индекс
  * @param arr - массив
- * @param n - кол-во строк
- * @param m - кол-во столбцов
  */
-void printArray(int** arr, int const n, int const m);
+void replaceMaxWithIndex(vector<vector<int>>& arr);
 /**
- * @brief заменяет максимальный элемент каждой строки номером столбца в котором он находится.
+ * @brief находит минимальный элемент и добавляет строку четных чисел после каждой строки, содержащей этот элемент
  * @param arr - массив
- * @param rows - кол-во строк массива
- * @param cols - кол-во столбцов массива
  */
-void replaceMaxWithColumnIndex(int** arr, int rows, int cols)
-/**
- * @brief вставляет после всех строк, содержащих минимальный элемент многомерного массива, строку 2, 4, 6,...
- * @param arr3 - массив, полученный в ходе работы функции
- * @param arr - массив
- * @param m - кол-во столбцов
- */
-void insertAfterMinElement(int** arr, int** arr3, int m)
-/**
- * @brief заполнение массива автоматически случайнвми числами в заданном диапазоне
- * @param arr - массив
- * @param n - размер массива
- * @param min - минимальное значение диапазона значений элементов массива
- * @param max - максимальное значение диапазона значений элементов массива
- */
-void fillArrayRandom(int** arr, int const rows, int const cols, int const min, int const max);
+void insertEvenNumbersAfterMin(vector<vector<int>>& arr);
+
 /**
  * @brief проверяет диапазон
  * @param min - минимальное значение диапазона значений элементов массива
@@ -63,234 +35,142 @@ void fillArrayRandom(int** arr, int const rows, int const cols, int const min, i
  */
 void checkRange(int const min, int const max);
 /**
- * @brief проверяет правильность введенного размера массива.
+ * @brief заполнение массива автоматически случайнвми числами в заданном диапазоне
+ * @param arr - массив
+ * @param n - размер массива
+ * @param min - минимальное значение диапазона значений элементов массива
+ * @param max - максимальное значение диапазона значений элементов массива
+ */
+void fillArrayRandom(int* arr, const int n, int const min, int const max);
+
+/**
+ * @brief Выводит массив на экран
+ * @param arr - массив
  * @param n - размер массива
  */
-void checkN(int const n);
-/**
- * @brief проверяет диапазон
- * @param arr - массив
- * @param rows - кол-во строк
- */
-void delArray(int** arr, int const rows);
-/**
- * @brief возвращает количество столбцов удовлетворяющих условию.
- * @param arr - массив
- * @param rows - кол-во строк массива
- * @param cols - кол-во столбцов массива
- * @return - кол-во столбцов удовлетворяющих условию
- */
-int getNumberOfCols(int** arr, int const rows, int const cols);
-/**
- * @brief копирует массив.
- * @param arr - массив
- * @param rows - кол-во строк массива
- * @param cols - кол-во столбцов массива
- * @return - скопированный массив
- */
-int** copyArray(int** arr, int const rows, int const cols);
-/**
- * @brief создает новый массив.
- * @param rows - кол-во строк массива
- * @param cols - кол-во столбцов массива
- * @return - новый массив
- */
-int** getNewArray(int const rows, int const cols);
+void printArray(int* arr, const int n);
+
 /**
 * @brief точка входа в программу
 * @return 0 - если программма выполнена корректно, инече -1
 */
 int main() {
-    cout << "Enter number of rows in array: ";
-    int rows = getValue();
-    checkN(rows);
-    cout << "Enter number of columns in array: ";
-    int cols = getValue();
-    checkN(cols);
-    int** arr = getNewArray(rows, cols);
-    cout << "Enter min and max values of range: " << endl;
-    int minValue = getValue();
-    int maxValue = getValue();
-    checkRange(minValue, maxValue);
-    cout << "Enter your choice to fill array: " << endl
-        << RANDOM << " to fill randomly" << endl
-        << MANUALLY << " to fill manually" << endl;
-    int choice = getValue();
-    switch ((enum SELECT)choice)
-    {
-    case RANDOM:
-        fillArrayRandom(arr, rows, cols, minValue, maxValue);
-        break;
-    case MANUALLY:
-        fillArray(arr, rows, cols, minValue, maxValue);
-        break;
-    default:
-        cout << "Your choice is wrong" << endl;
-        return 1;
-    }
+    int rows, cols, minValue, maxValue;
 
-    cout << "Original array:" << endl;
-    printArray(arr, rows, cols);
-    int** arr2 = copyArray(arr, rows, cols);
-    void replaceMaxWithColumnIndex(int** arr, int rows, int cols)
+    cout << "Enter number of rows: ";
+    cin >> rows;
+    cout << "Enter number of columns: ";
+    cin >> cols;
+    cout << "Enter min value: ";
+    cin >> minValue;
+    cout << "Enter max value: ";
+    cin >> maxValue;
 
-    cout << "Array after replacing the maximum element of each row with the column number:" << endl;
-    printArray(arr2, rows, cols);
-    delArray(arr2, rows);
+    // Создаем двумерный массив
+    vector<vector<int>> array(rows, vector<int>(cols));
 
-    int newcols = cols - getNumberOfCols(arr, rows, cols);
-    int** arr3 = getNewArray(rows, newcols);
-    insertAfterMinElement(int** arr, int** arr3, int m);//Копируем в arr3 если удовлетворяет условию 
+    // Заполняем массив случайными числами
+    fill2DArrayRandom(array, minValue, maxValue);
+    
+    cout << "Random 2D Array:" << endl;
+    print2DArray(array);
+    
+    // Замена максимальных элементов
+    replaceMaxWithIndex(array); 
+    
+    cout << "\nArray after replacing max elements with indices:" << endl;
+    print2DArray(array);
 
-    cout << "Array after inserts after all lines containing the minimum element of the array, line 2, 4, 6,...:" << endl;
-    printArray(arr3, rows, newcols);
-    delArray(arr3, rows);
-
-
-    delArray(arr, rows);
+    // Вставка четных чисел после строк с минимальным элементом
+    insertEvenNumbersAfterMin(array);
+    
+    cout << "\nArray after inserting even numbers:" << endl;
+    print2DArray(array);
+    
     return 0;
 }
-int getValue()
+
+
+void fill2DArrayRandom(vector<vector<int>>& arr, int min, int max) 
 {
-    int value;
-    cin >> value;
-    if (cin.fail())
+    srand(static_cast<unsigned>(time(0))); 
+    for (auto& row : arr) 
     {
-        cout << "Incorrect input";
-        abort();
-    }
-    return value;
-}
-void fillArray(int** arr, int const rows, int const cols, int const min, int const max)
-{
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < cols; j++)
+        for (auto& value : row) 
         {
-            cout << "Enter value for element [" << i << "][" << j << "]: ";
-            arr[i][j] = getValue();
+            value = rand() % (max - min + 1) + min;
         }
     }
 }
-void printArray(int** arr, int const n, int const m) {
-    for (size_t i = 0; i < n; i++) {
-        for (size_t j = 0; j < m; j++) {
-            cout << setw(4);
-            cout << arr[i][j] << " ";
+
+void print2DArray(const vector<vector<int>>& arr) 
+{
+    for (const auto& row : arr) 
+    {
+        for (int value : row) 
+        {
+            cout << value << " ";
         }
         cout << endl;
     }
 }
 
-void replaceMaxWithColumnIndex(int** arr, int rows, int cols) 
+// Функция для замены максимальных элементов на индексы
+void replaceMaxWithIndex(vector<vector<int>>& arr) 
 {
-    for (int i = 0; i < matrix.size(); ++i) {
-        int maxElement = matrix[i][0];
-        int columnIndex = 0;
+    for (auto& row : arr) 
+    {
+        int maxIndex = 0;
+        int maxValue = row[0];
         
-        for (int j = 1; j < matrix[i].size(); ++j) {
-            if (matrix[i][j] > maxElement) {
-                maxElement = matrix[i][j];
-                columnIndex = j;
+        // Нахождение максимального элемента и его индекса
+        for (int j = 1; j < row.size(); j++) 
+        {
+            if (row[j] > maxValue) 
+            {
+                maxValue = row[j];
+                maxIndex = j;
             }
         }
         
-        matrix[i][columnIndex] = columnIndex;
+        // Замена максимального элемента на его индекс
+        row[maxIndex] = maxIndex;
     }
 }
 
-void insertRowAfterMinElement(int** arr, int** arr3, int m) 
+// Функция для вставки четных чисел после строк с минимальным элементом
+void insertEvenNumbersAfterMin(vector<vector<int>>& arr) 
 {
+    // Находим минимальный элемент
     int minElement = arr[0][0];
-    for (int i = 0; i < arr.size(); ++i) {
-        for (int j = 0; j < arr[i].size(); ++j) {
-            if (arr[i][j] < minElement) {
-                minElement = arr[i][j];
+    for (const auto& row : arr) 
+    {
+        for (int value : row) 
+        {
+            minElement = std::min(minElement, value);
+        }
+    }
+
+    // Новый вектор для хранения результата
+    vector<vector<int>> result;
+
+    // Проходим по всем строкам матрицы
+    for (const auto& row : arr) 
+    {
+        result.push_back(row); // Добавляем текущую строку в результат
+
+        // Если минимальный элемент присутствует в строке, добавляем четные числа
+        if (std::find(row.begin(), row.end(), minElement) != row.end()) 
+        {
+            vector<int> evenNumbers;
+            for (int i = 2; i <= 10; i += 2) 
+            { // Пример четных чисел до 10
+                evenNumbers.push_back(i);
             }
+            result.push_back(evenNumbers); // Добавляем строку с четными числами
         }
     }
 
-    for (int i = 0; i < arr.size(); ++i) {
-        for (int j = 0; j < arr[i].size(); ++j) {
-            if (arr[i][j] == minElement) {
-                arr[i].insert(arr[i].begin() + j + 1, {2, 4, 6});
-                j += 3; // Skip to the next element after inserted values
-            }
-        for (size_t i = 0; i < rows; i++) 
-        {
-            arr3[i][newCols] = arr[i][j];
-        }
-        newCols++;
-    }
-}
-
-void fillArrayRandom(int** arr, int const rows, int const cols, int const min, int const max)
-{
-    srand(time(0));
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < cols; j++)
-        {
-            arr[i][j] = rand() % (max - min) + min;
-        }
-    }
-}
-void checkRange(int const min, int const max)
-{
-    if (min >= max)
-    {
-        cout << "Wrong range entered: " << endl;
-        abort();
-    }
-}
-void checkN(int n)
-{
-    if (n <= 0)
-    {
-        cout << "Wrong size of array" << endl;
-        abort();
-    }
-}
-
-int** getNewArray(int const rows, int const cols)
-{
-    int** arr = new int* [rows];
-    for (size_t i = 0; i < rows; i++)
-    {
-        arr[i] = new int[cols];
-    }
-    return arr;
-}
-
-int** copyArray(int** arr, int const rows, int const cols)
-{
-    int** newArr = getNewArray(rows, cols);
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < cols; j++)
-        {
-            newArr[i][j] = arr[i][j];
-        }
-    }
-    return newArr;
-}
-
-void delArray(int** arr, int const rows)
-{
-    for (size_t i = 0; i < rows; i++) {
-        delete[] arr[i];
-    }
-    delete[] arr;
-}
-int getNumberOfCols(int** arr, int const rows, int const cols)
-{
-    int count = 0;
-    for (size_t j = 0; j < cols; j++)
-    {
-        if (arr[0][j] > arr[rows - 1][j])
-        {
-            count++;
-        }
-    }
-    return count;
+    // Перезаписываем оригинальный массив
+    arr = result;
 }
