@@ -1,0 +1,176 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+/**
+ * @brief создание и заполнение матрицы случайными элементами
+ * @param min - минимальное значение диапазона значений элементов матрицы
+ * @param max - максимальное значение диапазона значений элементов матрицы
+ */
+void fill2DArrayRandom(vector<vector<int>>& arr, int min, int max);
+/**
+ * @brief печать 2D массива
+ * @param arr - массив
+ */
+void print2DArray(const vector<vector<int>>& arr);
+/**
+ * @brief находит максимальный элемент в каждой строке и заменяет его на индекс
+ * @param arr - массив
+ */
+void replaceMaxWithIndex(vector<vector<int>>& arr);
+/**
+ * @brief находит минимальный элемент и добавляет строку четных чисел после каждой строки, содержащей этот элемент
+ * @param arr - массив
+ */
+void insertEvenNumbersAfterMin(vector<vector<int>>& arr);
+
+/**
+ * @brief проверяет диапазон
+ * @param min - минимальное значение диапазона значений элементов массива
+ * @param max - максимальное значение диапазона значений элементов массива
+ */
+void checkRange(int const min, int const max);
+/**
+ * @brief заполнение массива автоматически случайнвми числами в заданном диапазоне
+ * @param arr - массив
+ * @param n - размер массива
+ * @param min - минимальное значение диапазона значений элементов массива
+ * @param max - максимальное значение диапазона значений элементов массива
+ */
+void fillArrayRandom(int* arr, const int n, int const min, int const max);
+
+/**
+ * @brief Выводит массив на экран
+ * @param arr - массив
+ * @param n - размер массива
+ */
+void printArray(int* arr, const int n);
+
+/**
+* @brief точка входа в программу
+* @return 0 - если программма выполнена корректно, инече -1
+*/
+int main() {
+    int rows, cols, minValue, maxValue;
+
+    cout << "Enter number of rows: ";
+    cin >> rows;
+    cout << "Enter number of columns: ";
+    cin >> cols;
+    cout << "Enter min value: ";
+    cin >> minValue;
+    cout << "Enter max value: ";
+    cin >> maxValue;
+
+    // Создаем двумерный массив
+    vector<vector<int>> array(rows, vector<int>(cols));
+
+    // Заполняем массив случайными числами
+    fill2DArrayRandom(array, minValue, maxValue);
+    
+    cout << "Random 2D Array:" << endl;
+    print2DArray(array);
+    
+    // Замена максимальных элементов
+    replaceMaxWithIndex(array); 
+    
+    cout << "\nArray after replacing max elements with indices:" << endl;
+    print2DArray(array);
+
+    // Вставка четных чисел после строк с минимальным элементом
+    insertEvenNumbersAfterMin(array);
+    
+    cout << "\nArray after inserting even numbers:" << endl;
+    print2DArray(array);
+    
+    return 0;
+}
+
+
+void fill2DArrayRandom(vector<vector<int>>& arr, int min, int max) 
+{
+    srand(static_cast<unsigned>(time(0))); 
+    for (auto& row : arr) 
+    {
+        for (auto& value : row) 
+        {
+            value = rand() % (max - min + 1) + min;
+        }
+    }
+}
+
+void print2DArray(const vector<vector<int>>& arr) 
+{
+    for (const auto& row : arr) 
+    {
+        for (int value : row) 
+        {
+            cout << value << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Функция для замены максимальных элементов на индексы
+void replaceMaxWithIndex(vector<vector<int>>& arr) 
+{
+    for (auto& row : arr) 
+    {
+        int maxIndex = 0;
+        int maxValue = row[0];
+        
+        // Нахождение максимального элемента и его индекса
+        for (int j = 1; j < row.size(); j++) 
+        {
+            if (row[j] > maxValue) 
+            {
+                maxValue = row[j];
+                maxIndex = j;
+            }
+        }
+        
+        // Замена максимального элемента на его индекс
+        row[maxIndex] = maxIndex;
+    }
+}
+
+// Функция для вставки четных чисел после строк с минимальным элементом
+void insertEvenNumbersAfterMin(vector<vector<int>>& arr) 
+{
+    // Находим минимальный элемент
+    int minElement = arr[0][0];
+    for (const auto& row : arr) 
+    {
+        for (int value : row) 
+        {
+            minElement = std::min(minElement, value);
+        }
+    }
+
+    // Новый вектор для хранения результата
+    vector<vector<int>> result;
+
+    // Проходим по всем строкам матрицы
+    for (const auto& row : arr) 
+    {
+        result.push_back(row); // Добавляем текущую строку в результат
+
+        // Если минимальный элемент присутствует в строке, добавляем четные числа
+        if (std::find(row.begin(), row.end(), minElement) != row.end()) 
+        {
+            vector<int> evenNumbers;
+            for (int i = 2; i <= 10; i += 2) 
+            { // Пример четных чисел до 10
+                evenNumbers.push_back(i);
+            }
+            result.push_back(evenNumbers); // Добавляем строку с четными числами
+        }
+    }
+
+    // Перезаписываем оригинальный массив
+    arr = result;
+}
